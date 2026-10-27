@@ -5,7 +5,6 @@ import com.alunos.cadastro_alunos.infrastuture.repository.AlunosRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-
 public class AlunosService {
 
     private final AlunosRepository repository;
@@ -19,11 +18,9 @@ public class AlunosService {
     }
 
     public Alunos buscarAlunosPorEmail(String email) {
-
         return repository.findByEmail(email).orElseThrow(
                 () -> new RuntimeException("Email não encontrado")
         );
-
     }
 
     public void deletarAlunosPorEmail(String email) {
@@ -32,19 +29,13 @@ public class AlunosService {
 
     public void atualizarAlunosPorId(Integer id, Alunos alunos){
         Alunos alunosEntity = repository.findById(id).orElseThrow(() ->
-            new RuntimeException("Aluno não encontrado"));
+                new RuntimeException("Aluno não encontrado"));
 
-        Alunos alunosAtualizado = Alunos.builder()
-                .email(alunos.getEmail() != null ? alunos.getEmail() :
-                        alunosEntity.getEmail())
-                .nome(alunos.getNome() != null ? alunos.getNome() :
-                        alunosEntity.getNome())
-                .id(alunosEntity.getId())
-                .build();
+        Alunos alunosAtualizado = new Alunos();
+        alunosAtualizado.setId(alunosEntity.getId());
+        alunosAtualizado.setEmail(alunos.getEmail() != null ? alunos.getEmail() : alunosEntity.getEmail());
+        alunosAtualizado.setNome(alunos.getNome() != null ? alunos.getNome() : alunosEntity.getNome());
 
         repository.saveAndFlush(alunosAtualizado);
-
-
     }
-
 }
