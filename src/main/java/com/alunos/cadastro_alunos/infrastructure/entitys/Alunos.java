@@ -1,16 +1,16 @@
-package com.alunos.cadastro_alunos.infrastuture.entitys;
+package com.alunos.cadastro_alunos.infrastructure.entitys;
 
 import jakarta.persistence.*;
 
-@Table(name = "alunos")
 @Entity
+@Table(name = "alunos")
 public class Alunos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "nome")

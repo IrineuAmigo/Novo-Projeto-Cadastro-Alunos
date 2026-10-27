@@ -1,7 +1,7 @@
 package com.alunos.cadastro_alunos.business;
 
-import com.alunos.cadastro_alunos.infrastuture.entitys.Alunos;
-import com.alunos.cadastro_alunos.infrastuture.repository.AlunosRepository;
+import com.alunos.cadastro_alunos.infrastructure.entitys.Alunos;
+import com.alunos.cadastro_alunos.infrastructure.repository.AlunosRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,13 +13,13 @@ public class AlunosService {
         this.repository = repository;
     }
 
-    public void salvarAlunos(Alunos alunos) {
-        repository.saveAndFlush(alunos);
+    public Alunos salvarAlunos(Alunos alunos) {
+        return repository.saveAndFlush(alunos);
     }
 
     public Alunos buscarAlunosPorEmail(String email) {
         return repository.findByEmail(email).orElseThrow(
-                () -> new RuntimeException("Email não encontrado")
+                () -> new RuntimeException("Email não encontrado: " + email)
         );
     }
 
@@ -27,15 +27,14 @@ public class AlunosService {
         repository.deleteByEmail(email);
     }
 
-    public void atualizarAlunosPorId(Integer id, Alunos alunos){
-        Alunos alunosEntity = repository.findById(id).orElseThrow(() ->
-                new RuntimeException("Aluno não encontrado"));
+    public Alunos atualizarAlunosPorId(Integer id, Alunos alunos) {
+        Alunos alunosEntity = repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Aluno não encontrado com o ID: " + id)
+        );
 
-        Alunos alunosAtualizado = new Alunos();
-        alunosAtualizado.setId(alunosEntity.getId());
-        alunosAtualizado.setEmail(alunos.getEmail() != null ? alunos.getEmail() : alunosEntity.getEmail());
-        alunosAtualizado.setNome(alunos.getNome() != null ? alunos.getNome() : alunosEntity.getNome());
+        alunosEntity.setEmail(alunos.getEmail() != null ? alunos.getEmail() : alunosEntity.getEmail());
+        alunosEntity.setNome(alunos.getNome() != null ? alunos.getNome() : alunosEntity.getNome());
 
-        repository.saveAndFlush(alunosAtualizado);
+        return repository.saveAndFlush(alunosEntity);
     }
 }

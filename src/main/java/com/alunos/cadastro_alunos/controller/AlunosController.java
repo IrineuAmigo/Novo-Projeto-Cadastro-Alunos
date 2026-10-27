@@ -1,7 +1,8 @@
 package com.alunos.cadastro_alunos.controller;
 
 import com.alunos.cadastro_alunos.business.AlunosService;
-import com.alunos.cadastro_alunos.infrastuture.entitys.Alunos;
+import com.alunos.cadastro_alunos.infrastructure.entitys.Alunos;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +17,9 @@ public class AlunosController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvarAlunos(@RequestBody Alunos alunos) {
-        alunosService.salvarAlunos(alunos);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Alunos> salvarAlunos(@RequestBody Alunos alunos) {
+        Alunos novoAluno = alunosService.salvarAlunos(alunos);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoAluno);
     }
 
     @GetMapping
@@ -29,13 +30,13 @@ public class AlunosController {
     @DeleteMapping
     public ResponseEntity<Void> deletarAlunosPorEmail(@RequestParam String email) {
         alunosService.deletarAlunosPorEmail(email);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
-    public ResponseEntity<Void> atualizarAlunosPorId(@RequestParam Integer id,
-                                                     @RequestBody Alunos alunos) {
-        alunosService.atualizarAlunosPorId(id, alunos);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Alunos> atualizarAlunosPorId(@RequestParam Integer id,
+                                                       @RequestBody Alunos alunos) {
+        Alunos alunoAtualizado = alunosService.atualizarAlunosPorId(id, alunos);
+        return ResponseEntity.ok(alunoAtualizado);
     }
 }
